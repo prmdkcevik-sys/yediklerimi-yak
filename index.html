@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yediklerimi Yak</title>
+    <style>
+        :root {
+            --primary-color: #ff7f00;
+            --primary-dark: #e06d00;
+            --bg-color: #fff8f0;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --error-color: #d32f2f;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group label {
+            font-weight: bold;
+        }
+
+        .input-group input {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        .warning {
+            color: var(--error-color);
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 480px) {
+            .food-grid {
+                grid-template-nums: 1fr;
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .food-card {
+            background: #fff;
+            border: 2px solid #ffe0b2;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .food-card:hover {
+            border-color: var(--primary-color);
+            background: #fff8f0;
+            transform: translateY(-2px);
+        }
+
+        .food-card h3 {
+            margin: 0 0 10px 0;
+            color: #d84315;
+            font-size: 1.1em;
+        }
+
+        .food-card p {
+            margin: 0;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .fatura-box {
+            background: #f9f9f9;
+            border: 1px dashed var(--primary-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .fatura-box h3 {
+            margin-top: 0;
+            color: var(--primary-dark);
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+        }
+
+        .alternatives {
+            font-size: 1.05em;
+            font-weight: bold;
+            color: #c25e00;
+            margin: 10px 0;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-sub {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: background 0.2s;
+        }
+
+        .btn-sub:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .msg-area {
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: center;
+            color: #2e7d32;
+        }
+
+        .timer-area {
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: center;
+            color: #1565c0;
+            font-size: 1.1em;
+        }
+
+        .disclaimer {
+            margin-top: 25px;
+            font-size: 0.75em;
+            color: #777;
+            text-align: center;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🍟 Yediklerimi Yak</h1>
+        <div class="subtitle">Mizahi Ekrani Simülasyonu</div>
+
+        <div class="input-group">
+            <label for="weightInput">Örnek ağırlık (kg):</label>
+            <input type="number" id="weightInput" value="70" oninput="saveWeight()">
+            <div id="warning" class="warning"></div>
+        </div>
+
+        <h3 style="text-align:center; margin-bottom:10px;">Bir Yiyecek Seçin:</h3>
+        <div class="food-grid">
+            <div class="food-card" onclick="selectFood('Küçük paket cips (40 g)', 210)">
+                <h3>Küçük Paket Cips (40 g)</h3>
+                <p>210 kcal</p>
+            </div>
+            <div class="food-card" onclick="selectFood('Baklava (1 dilim, 40 g)', 175)">
+                <h3>Baklava (1 dilim, 40 g)</h3>
+                <p>175 kcal</p>
+            </div>
+            <div class="food-card" onclick="selectFood('Kola (1 kutu, 330 ml)', 140)">
+                <h3>Kola (1 kutu, 330 ml)</h3>
+                <p>140 kcal</p>
+            </div>
+            <div class="food-card" onclick="selectFood('Çikolatalı gofret (35 g)', 185)">
+                <h3>Çikolatalı Gofret (35 g)</h3>
+                <p>185 kcal</p>
+            </div>
+        </div>
+
+        <div id="resultArea"></div>
+
+        <div class="disclaimer">
+            Sonuçlar yaklaşıkdır. Yiyecek suç ve egzersiz ceza değildir. Enerji bilgisinde paket etiketi esas alınmıştır. Sağlık veya diyet önerisi veya klinik değerlendirme değildir.
+        </div>
+    </div>
+
+    <script>
+        let timerInterval = null;
+
+        window.onload = function() {
+            const savedWeight = localStorage.getItem('yediklerimiYak_weight');
+            if (savedWeight !== null) {
+                document.getElementById('weightInput').value = savedWeight;
+            }
+        };
+
+        function saveWeight() {
+            const weightVal = document.getElementById('weightInput').value;
+            if (weightVal !== '') {
+                localStorage.setItem('yediklerimiYak_weight', weightVal);
+            }
+        }
+
+        function validateAndGetWeight() {
+            const inputVal = document.getElementById('weightInput').value.trim();
+            const warningEl = document.getElementById('warning');
+            
+            if (inputVal === '' || isNaN(inputVal) || Number(inputVal) <= 0) {
+                warningEl.textContent = 'Lütfen geçerli, pozitif bir sayı giriniz!';
+                return null;
+            }
+            warningEl.textContent = '';
+            return Number(inputVal);
+        }
+
+        function selectFood(name, kcal) {
+            const weight = validateAndGetWeight();
+            if (weight === null) {
+                document.getElementById('resultArea').innerHTML = '';
+                return;
+            }
+
+            // MET katsayıları
+            const metWalk = 4.8;
+            const metSquat = 6.5;
+            const metStair = 6.8;
+
+            // Dakikalık enerji harcaması = MET * 3.5 * ağırlık / 200
+            const walkMinEnergy = (metWalk * 3.5 * weight) / 200;
+            const squatMinEnergy = (metSquat * 3.5 * weight) / 200;
+            const stairMinEnergy = (metStair * 3.5 * weight) / 200;
+
+            // Süreler (dakika)
+            const walkTime = kcal / walkMinEnergy;
+            const squatTime = kcal / squatMinEnergy;
+            const stairTime = kcal / stairMinEnergy;
+
+            // Yuvarlamalar (Yürüyüş dakika, Squat 20 ile çarpım, Merdiven 4 ile çarpım)
+            const walkRounded = Math.round(walkTime);
+            const squatRounded = Math.round(squatTime * 20);
+            const stairRounded = Math.round(stairTime * 4);
+
+            const resultArea = document.getElementById('resultArea');
+            resultArea.innerHTML = `
+                <div class="fatura-box">
+                    <h3>FATURA</h3>
+                    <p><strong>Yiyecek:</strong> ${name} (${kcal} kcal)</p>
+                    <p><strong>Gerekli Eşdeğer Egzersiz:</strong></p>
+                    <div class="alternatives">
+                        ${walkRounded} dakika tempolu yürüyüş <strong>VEYA</strong> ${squatRounded} squat <strong>VEYA</strong> ${stairRounded} kat merdiven
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn-sub" onclick="showMsg('satinal')">Satın alıyorum</button>
+                        <button class="btn-sub" onclick="showMsg('pazarlik')">Pazarlık yap</button>
+                        <button class="btn-sub" onclick="startSim()">Simülasyonu başlat</button>
+                    </div>
+                    <div id="msgArea" class="msg-area"></div>
+                    <div id="timerArea" class="timer-area"></div>
+                </div>
+            `;
+
+            // Sayaç sıfırlansın yeni seçimde
+            if (timerInterval !== null) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function showMsg(type) {
+            const msgArea = document.getElementById('msgArea');
+            if (type === 'satinal') {
+                msgArea.textContent = 'Afiyet olsun!';
+            } else if (type === 'pazarlik') {
+                msgArea.textContent = 'Yarım porsiyon yedim say, hemen 20 jumping jack!';
+            }
+        }
+
+        function startSim() {
+            const timerArea = document.getElementById('timerArea');
+            if (timerInterval !== null) return; // İkinci sayacın aynı anda başlamasını önler
+
+            let count = 20;
+            timerArea.textContent = `Sayaç: ${count}`;
+
+            timerInterval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    timerArea.textContent = `Sayaç: ${count}`;
+                } else {
+                    timerArea.textContent = 'Anlaşma tamam!';
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
