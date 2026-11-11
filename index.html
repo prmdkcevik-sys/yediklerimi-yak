@@ -83,7 +83,6 @@
 
         @media (max-width: 480px) {
             .food-grid {
-                grid-template-nums: 1fr;
                 grid-template-columns: 1fr;
             }
         }
@@ -194,7 +193,7 @@
 
     <div class="container">
         <h1>🍟 Yediklerimi Yak</h1>
-        <div class="subtitle">Mizahi Ekrani Simülasyonu</div>
+        <div class="subtitle">Mizahi Ekran Simülasyonu</div>
 
         <div class="input-group">
             <label for="weightInput">Örnek ağırlık (kg):</label>
@@ -265,22 +264,18 @@
                 return;
             }
 
-            // MET katsayıları
             const metWalk = 4.8;
             const metSquat = 6.5;
             const metStair = 6.8;
 
-            // Dakikalık enerji harcaması = MET * 3.5 * ağırlık / 200
             const walkMinEnergy = (metWalk * 3.5 * weight) / 200;
             const squatMinEnergy = (metSquat * 3.5 * weight) / 200;
             const stairMinEnergy = (metStair * 3.5 * weight) / 200;
 
-            // Süreler (dakika)
             const walkTime = kcal / walkMinEnergy;
             const squatTime = kcal / squatMinEnergy;
             const stairTime = kcal / stairMinEnergy;
 
-            // Yuvarlamalar (Yürüyüş dakika, Squat 20 ile çarpım, Merdiven 4 ile çarpım)
             const walkRounded = Math.round(walkTime);
             const squatRounded = Math.round(squatTime * 20);
             const stairRounded = Math.round(stairTime * 4);
@@ -305,7 +300,6 @@
                 </div>
             `;
 
-            // Sayaç sıfırlansın yeni seçimde
             if (timerInterval !== null) {
                 clearInterval(timerInterval);
                 timerInterval = null;
@@ -323,7 +317,7 @@
 
         function startSim() {
             const timerArea = document.getElementById('timerArea');
-            if (timerInterval !== null) return; // İkinci sayacın aynı anda başlamasını önler
+            if (timerInterval !== null) return;
 
             let count = 20;
             timerArea.textContent = `Sayaç: ${count}`;
@@ -338,6 +332,15 @@
                     timerInterval = null;
                 }
             }, 1500);
+        }
+
+        // Service Worker Kaydı
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker kaydedildi:', reg.scope))
+                    .catch(err => console.log('Service Worker kaydı başarısız:', err));
+            });
         }
     </script>
 </body>
