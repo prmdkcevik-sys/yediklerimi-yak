@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Yediklerimi Yak - Simge Üretici</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #fff8f0; }
+        button { background: #ff7f00; color: white; border: none; padding: 15px 25px; font-size: 1.1em; border-radius: 8px; cursor: pointer; margin: 10px; font-weight: bold; }
+        button:hover { background: #e06d00; }
+        canvas { display: none; }
+    </style>
+</head>
+<body>
+    <h1>🍟 Simge Üretici</h1>
+    <p>Uygulama simgelerini indirmek için aşağıdaki düğmeleri kullanın:</p>
+    
+    <button onclick="downloadIcon(192, 'icon-192.png')">icon-192.png İndir</button>
+    <button onclick="downloadIcon(512, 'icon-512.png')">icon-512.png İndir</button>
+    <button onclick="downloadIcon(180, 'apple-touch-icon.png')">apple-touch-icon.png İndir</button>
+
+    <canvas id="iconCanvas"></canvas>
+
+    <script>
+        function drawIcon(size) {
+            const canvas = document.getElementById('iconCanvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            // Arka plan (Turuncu)
+            ctx.fillStyle = '#ff7f00';
+            ctx.fillRect(0, 0, size, size);
+
+            // Patates kızartması / emoji sembolü (Merkezde)
+            ctx.font = `${size * 0.5}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('🍟', size / 2, size / 2);
+        }
+
+        function downloadIcon(size, filename) {
+            drawIcon(size);
+            const canvas = document.getElementById('iconCanvas');
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>
